@@ -1,0 +1,101 @@
+id,titulo,autor
+1,Dom Casmurro,Machado de Assis
+2,1984,George Orwell
+3,Harry Potter e a Pedra Filosofal,J.K. Rowling
+4,O Senhor dos Anéis: A Sociedade do Anel,J.R.R. Tolkien
+5,O Hobbit,J.R.R. Tolkien
+6,A Revolução dos Bichos,George Orwell
+7,Capitães da Areia,Jorge Amado
+8,O Alquimista,Paulo Coelho
+9,Memórias Póstumas de Brás Cubas,Machado de Assis
+10,O Pequeno Príncipe,Antoine de Saint-Exupéry
+11,Harry Potter e a Câmara Secreta,J.K. Rowling
+12,Harry Potter e o Prisioneiro de Azkaban,J.K. Rowling
+13,Harry Potter e o Cálice de Fogo,J.K. Rowling
+14,Harry Potter e a Ordem da Fênix,J.K. Rowling
+15,Harry Potter e o Enigma do Príncipe,J.K. Rowling
+16,Harry Potter e as Relíquias da Morte,J.K. Rowling
+17,O Código Da Vinci,Dan Brown
+18,Anjos e Demônios,Dan Brown
+19,Inferno,Dan Brown
+20,O Silmarillion,J.R.R. Tolkien
+21,Crime e Castigo,Fiódor Dostoiévski
+22,Os Irmãos Karamázov,Fiódor Dostoiévski
+23,Guerra e Paz,Leon Tolstói
+24,Anna Kariênina,Leon Tolstói
+25,O Morro dos Ventos Uivantes,Emily Brontë
+26,Orgulho e Preconceito,Jane Austen
+27,Emma,Jane Austen
+28,Sense e Sensibilidade,Jane Austen
+29,O Apanhador no Campo de Centeio,J.D. Salinger
+30,O Grande Gatsby,F. Scott Fitzgerald
+31,Admirável Mundo Novo,Aldous Huxley
+32,Fahrenheit 451,Ray Bradbury
+33,O Nome do Vento,Patrick Rothfuss
+34,A Crônica do Matador do Rei: O Temor do Sábio,Patrick Rothfuss
+35,Duna,Frank Herbert
+36,Duna Messiah,Frank Herbert
+37,Fundação,Isaac Asimov
+38,Fundação e Império,Isaac Asimov
+39,Segunda Fundação,Isaac Asimov
+40,Eu, Robô,Isaac Asimov
+41,O Guia do Mochileiro das Galáxias,Douglas Adams
+42,O Restaurante no Fim do Universo,Douglas Adams
+43,A Vida, o Universo e Tudo Mais,Douglas Adams
+44,It: A Coisa,Stephen King
+45,O Iluminado,Stephen King
+46,Doutor Sono,Stephen King
+47,A Espera de um Milagre,Stephen King
+48,O Cemitério,Stephen King
+49,Ensaio Sobre a Cegueira,José Saramago
+50,O Homem Duplicado,José Saramago
+51,O Conto da Aia,Margaret Atwood
+52,Oryx e Crake,Margaret Atwood
+53,A Menina que Roubava Livros,Markus Zusak
+54,Jogos Vorazes,Suzanne Collins
+55,Em Chamas,Suzanne Collins
+56,A Esperança,Suzanne Collins
+57,Crepúsculo,Stephenie Meyer
+58,Lua Nova,Stephenie Meyer
+59,Eclipse,Stephenie Meyer
+60,Amanhecer,Stephenie Meyer
+61,O Leão, a Feiticeira e o Guarda-Roupa,C.S. Lewis
+62,O Príncipe Caspian,C.S. Lewis
+63,A Viagem do Peregrino da Alvorada,C.S. Lewis
+64,As Crônicas de Nárnia,C.S. Lewis
+65,O Diário de Anne Frank,Anne Frank
+66,A Cabana,William P. Young
+67,O Velho e o Mar,Ernest Hemingway
+68,Por Quem os Sinos Dobram,Ernest Hemingway
+69,A Metamorfose,Franz Kafka
+70,O Processo,Franz Kafka
+71,O Estrangeiro,Albert Camus
+72,A Peste,Albert Camus
+73,O Retrato de Dorian Gray,Oscar Wilde
+74,Drácula,Bram Stoker
+75,Frankenstein,Mary Shelley
+76,A Ilha do Tesouro,Robert Louis Stevenson
+77,Robinson Crusoé,Daniel Defoe
+78,As Aventuras de Sherlock Holmes,Arthur Conan Doyle
+79,O Cão dos Baskervilles,Arthur Conan Doyle
+80,O Hobbit: Uma Jornada Inesperada,J.R.R. Tolkien
+81,O Ladrão de Raios,Rick Riordan
+82,O Mar de Monstros,Rick Riordan
+83,A Maldição do Titã,Rick Riordan
+84,A Batalha do Labirinto,Rick Riordan
+85,O Último Olimpiano,Rick Riordan
+86,A Culpa é das Estrelas,John Green
+87,Cidades de Papel,John Green
+88,Quem é Você, Alasca?,John Green
+89,O Diário de um Banana,Jeff Kinney
+90,A Menina do Trem,Paula Hawkins
+91,O Código dos Bilionários,Ben Mezrich
+92,Steve Jobs,Walter Isaacson
+93,Sapiens,Yuval Noah Harari
+94,Homo Deus,Yuval Noah Harari
+95,21 Lições para o Século 21,Yuval Noah Harari
+96,Pai Rico Pai Pobre,Robert Kiyosaki
+97,O Poder do Hábito,Charles Duhigg
+98,Hábitos Atômicos,James Clear
+99,A Arte da Guerra,Sun Tzu
+100,O Príncipe,Nicolau Maquiavel
