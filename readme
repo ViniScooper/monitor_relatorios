@@ -1,0 +1,19 @@
+estou fazendo testes de perfomace no banco vou usar mysql como o database
+
+primeiro passo vou inserir mais dados atraves de planilha
+
+depois irei ver a perfomace quando o user fizer a consulta na tela atraves da api
+
+
+irei criar um index  para melhorar a busca pelo titulo e a consulta seja mais  rapida
+
+depois irei refazer o squema 
+
+na minha cabeça vai ser assim o squema assim relacional
+
+autores-  livros -  - data dos livros  - livro mais vendido
+
+
+para deixar a consulta robusta um pouco e depois criar views para ajudar nas consultas
+
+
