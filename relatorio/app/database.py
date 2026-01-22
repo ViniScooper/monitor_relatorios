@@ -163,6 +163,7 @@ def excluir_livro_do_banco(id: int):
         # Deletar vendas primeiro devido a FK (opcional se houver ON DELETE CASCADE)
         cur.execute("DELETE FROM vendas WHERE CODG_LIVRO_FK = %s", (id,))
         cur.execute("DELETE FROM livro WHERE CODG_LIVRO_PK = %s", (id,))
+  #      cur.execute("DELETE FROM autor WHERE CODG_AUTOR_PK = %s", (id,))
         conn.commit()
         rows_affected = cur.rowcount
         cur.close()
