@@ -1,395 +1,361 @@
 <!doctype html>
-<!--
-============================================================================================================
-PÁGINA INICIAL - SISTEMA DE GERENCIAMENTO DE LIVROS
-============================================================================================================
-Este arquivo HTML é o template principal da aplicação web.
-Ele exibe a lista de livros e permite:
-- Buscar livros por nome/título
-- Importar livros via arquivo CSV
-- Visualizar todos os livros cadastrados
-- Excluir livros
-============================================================================================================
--->
-
 <html lang="pt-br">
+
 <head>
-  <!-- Configurações básicas da página -->
-  <meta charset="utf-8" />  <!-- Define a codificação de caracteres (suporta acentos) -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- Responsivo para mobile -->
-  <title>Lista de livros</title>  <!-- Título que aparece na aba do navegador -->
-  
-  <!-- Link para arquivo CSS externo (se existir) -->
-  <link rel="stylesheet" href="/static/style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitor de Relatórios de Livros</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --success: #10b981;
+      --danger: #ef4444;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.025em;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      margin-bottom: 32px;
+    }
+
+    .forms-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 768px) {
+      .forms-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+
+    input[type="text"],
+    input[type="file"] {
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      font-size: 1rem;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--border);
+      color: var(--text-main);
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e1;
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: var(--danger);
+    }
+
+    .btn-danger:hover {
+      background: #fecaca;
+    }
+
+    .flash-messages {
+      margin-bottom: 24px;
+    }
+
+    .flash-message {
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .flash-success {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .flash-error {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .livros-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .livro-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .livro-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .livro-main {
+      flex: 1;
+    }
+
+    .livro-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge-id {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .badge-genero {
+      background: #e0e7ff;
+      color: #4338ca;
+    }
+
+    .livro-titulo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .livro-autor {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+
+    .livro-sinopse {
+      font-size: 0.9rem;
+      color: #475569;
+      margin-bottom: 16px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .livro-footer {
+      display: flex;
+      gap: 24px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stat-value {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px;
+      color: var(--text-muted);
+    }
+  </style>
 </head>
+
 <body>
 
-<!--
-============================================================================================================
-ESTILOS CSS (CSS INLINE)
-============================================================================================================
-Os estilos abaixo definem a aparência visual da página.
-Eles estão inline (dentro do HTML) para facilitar, mas poderiam estar em um arquivo CSS separado.
-============================================================================================================
--->
-<style>
-  /* Estilo do corpo da página */
-  body {
-    font-family: Arial, sans-serif;  /* Fonte padrão */
-    max-width: 800px;  /* Largura máxima do conteúdo */
-    margin: 50px auto;  /* Centraliza a página (50px de margem superior, auto nas laterais) */
-    padding: 20px;  /* Espaçamento interno */
-    background-color: #e2e2e2;  /* Cor de fundo cinza claro */
-  }
-  
-  /* Container principal (caixa branca com os livros) */
-  .container {
-    background-color: white;  /* Fundo branco */
-    padding: 30px;  /* Espaçamento interno */
-    border-radius: 8px;  /* Bordas arredondadas */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);  /* Sombra sutil */
-  }
-  
-  /* Título principal */
-  h1 {
-    color: #333;  /* Cor do texto (cinza escuro) */
-    margin-bottom: 30px;  /* Espaçamento abaixo do título */
-  }
-  
-  /* Formulários (busca e upload) */
-  .upload-form {
-    margin-bottom: 30px;  /* Espaçamento abaixo do formulário */
-    padding: 20px;  /* Espaçamento interno */
-    background-color: #f9f9f9;  /* Fundo cinza muito claro */
-    border-radius: 5px;  /* Bordas arredondadas */
-  }
-  
-  /* Labels dos formulários */
-  .upload-form label {
-    display: block;  /* Faz o label ocupar toda a largura */
-    margin-bottom: 10px;  /* Espaçamento abaixo do label */
-    font-weight: bold;  /* Texto em negrito */
-  }
-  
-  /* Campo de arquivo (input file) */
-  .upload-form input[type="file"] {
-    margin-bottom: 10px;  /* Espaçamento abaixo do campo */
-  }
-  
-  /* Botões dos formulários */
-  .upload-form button {
-    background-color: #4CAF50;  /* Cor verde */
-    color: white;  /* Texto branco */
-    padding: 10px 20px;  /* Espaçamento interno (vertical, horizontal) */
-    border: none;  /* Sem borda */
-    border-radius: 4px;  /* Bordas arredondadas */
-    cursor: pointer;  /* Cursor vira "mão" ao passar o mouse */
-    font-size: 16px;  /* Tamanho da fonte */
-  }
-  
-  /* Efeito hover nos botões (quando passa o mouse) */
-  .upload-form button:hover {
-    background-color: #45a049;  /* Verde mais escuro */
-  }
-  
-  /* Container das mensagens flash (sucesso/erro) */
-  .flash-messages {
-    margin-bottom: 20px;  /* Espaçamento abaixo */
-  }
-  
-  /* Estilo das mensagens flash */
-  .flash-message {
-    padding: 12px;  /* Espaçamento interno */
-    margin-bottom: 10px;  /* Espaçamento entre mensagens */
-    border-radius: 4px;  /* Bordas arredondadas */
-    font-weight: bold;  /* Texto em negrito */
-  }
-  
-  /* Mensagem de sucesso (verde) */
-  .flash-success {
-    background-color: #d4edda;  /* Fundo verde claro */
-    color: #155724;  /* Texto verde escuro */
-    border: 1px solid #c3e6cb;  /* Borda verde */
-  }
-  
-  /* Mensagem de erro (vermelho) */
-  .flash-error {
-    background-color: #f8d7da;  /* Fundo vermelho claro */
-    color: #721c24;  /* Texto vermelho escuro */
-    border: 1px solid #f5c6cb;  /* Borda vermelha */
-  }
-  
-  /* Lista de livros (sem marcadores) */
-  .livros-list {
-    list-style: none;  /* Remove os marcadores (bolinhas) da lista */
-    padding: 0;  /* Remove o padding padrão */
-  }
-  
-  /* Item individual de um livro */
-  .livro-item {
-    display: flex;  /* Layout flexbox (permite alinhar elementos lado a lado) */
-    justify-content: space-between;  /* Espaça os elementos (info à esquerda, botão à direita) */
-    align-items: center;  /* Alinha verticalmente ao centro */
-    padding: 15px;  /* Espaçamento interno */
-    margin-bottom: 10px;  /* Espaçamento entre itens */
-    background-color: #f9f9f9;  /* Fundo cinza muito claro */
-    border-radius: 5px;  /* Bordas arredondadas */
-    border-left: 4px solid #4CAF50;  /* Borda esquerda verde (destaque visual) */
-  }
-  
-  /* Informações do livro (título, autor, ID) */
-  .livro-info {
-    flex: 1;  /* Ocupa todo o espaço disponível */
-  }
-  
-  /* ID do livro em negrito */
-  .livro-info strong {
-    color: #333;  /* Cor do texto */
-    font-size: 18px;  /* Tamanho da fonte */
-  }
-  
-  /* Área de ações (botões) */
-  .livro-actions {
-    margin-left: 20px;  /* Espaçamento à esquerda */
-  }
-  
-  /* Botão de excluir */
-  .btn-excluir {
-    background-color: #f44336;  /* Cor vermelha */
-    color: white;  /* Texto branco */
-    padding: 8px 16px;  /* Espaçamento interno */
-    border: none;  /* Sem borda */
-    border-radius: 4px;  /* Bordas arredondadas */
-    cursor: pointer;  /* Cursor vira "mão" */
-    font-size: 14px;  /* Tamanho da fonte */
-  }
-  
-  /* Efeito hover no botão excluir */
-  .btn-excluir:hover {
-    background-color: #da190b;  /* Vermelho mais escuro */
-  }
-  
-  /* Mensagem quando não há livros */
-  .empty-message {
-    text-align: center;  /* Centraliza o texto */
-    color: #666;  /* Cor cinza */
-    padding: 40px;  /* Espaçamento interno */
-    font-style: italic;  /* Texto em itálico */
-  }
-</style>
+  <div class="container">
+    <header>
+      <h1>📈 Monitor de Relatórios</h1>
+      <p>Gestão Inteligente de Livros, Autores e Vendas</p>
+    </header>
 
-<!--
-============================================================================================================
-CONTEÚDO PRINCIPAL DA PÁGINA
-============================================================================================================
--->
-
-<div class="container">
-  <!-- Título da página -->
-  <h1>📚 Lista de Livros</h1>
-
-  <!--
-  ==========================================================================================================
-  MENSAGENS FLASH (SUCESSO/ERRO)
-  ==========================================================================================================
-  As mensagens flash são mensagens temporárias que aparecem após uma ação
-  (ex: "Livro excluído com sucesso!", "Erro ao importar CSV", etc).
-  
-  O Flask armazena essas mensagens e as exibe aqui.
-  Elas desaparecem após serem visualizadas.
-  ==========================================================================================================
-  -->
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    <!-- get_flashed_messages() busca todas as mensagens flash armazenadas -->
-    <!-- with_categories=true faz com que as mensagens venham com sua categoria (success/error) -->
-    
+    {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-      <!-- Se houver mensagens, exibe cada uma -->
-      <div class="flash-messages">
-        {% for category, message in messages %}
-          <!-- Loop que percorre todas as mensagens -->
-          <!-- category = "success" ou "error" -->
-          <!-- message = texto da mensagem -->
-          <div class="flash-message flash-{{ category }}">
-            <!-- flash-{{ category }} cria classes como "flash-success" ou "flash-error" -->
-            {{ message }}
-          </div>
-        {% endfor %}
+    <div class="flash-messages">
+      {% for category, message in messages %}
+      <div class="flash-message flash-{{ category }}">
+        {{ message }}
       </div>
-    {% endif %}
-  {% endwith %}
-
-  <!--
-  ==========================================================================================================
-  FORMULÁRIO DE BUSCA DE LIVROS
-  ==========================================================================================================
-  Este formulário permite ao usuário buscar livros digitando parte do nome/título.
-  
-  Como funciona:
-  1. Usuário digita o nome do livro no campo de texto
-  2. Clica no botão "Buscar"
-  3. O formulário envia uma requisição GET para "/" com o parâmetro "busca"
-  4. O servidor filtra os livros e retorna apenas os que contêm o termo buscado
-  5. Se houver uma busca ativa, aparece o botão "Limpar" para voltar a ver todos os livros
-  ==========================================================================================================
-  -->
-  <div class="upload-form">
-    <form action="/" method="get" style="margin-bottom: 20px;">
-      <!-- action="/" = envia para a página inicial -->
-      <!-- method="get" = envia os dados via URL (query string) -->
-      
-      <label for="busca">🔍 Buscar Livro:</label>
-      <!-- Label do campo de busca -->
-      
-      <input 
-        type="text" 
-        id="busca" 
-        name="busca" 
-        placeholder="Digite o nome do livro..." 
-        value="{{ busca if busca else '' }}" 
-        style="padding: 8px; width: 300px; margin-right: 10px;"
-      >
-      <!-- 
-      type="text" = campo de texto
-      id="busca" = identificador único do campo
-      name="busca" = nome do parâmetro que será enviado ao servidor
-      placeholder = texto de exemplo que aparece quando o campo está vazio
-      value="{{ busca if busca else '' }}" = mantém o texto digitado após a busca
-        - Se a variável "busca" existir, mostra seu valor
-        - Se não existir, mostra string vazia
-      -->
-      
-      <button type="submit" style="background-color: #2196F3; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">
-        Buscar
-      </button>
-      <!-- Botão que envia o formulário -->
-      
-      {% if busca %}
-        <!-- Se houver uma busca ativa, mostra o botão "Limpar" -->
-        <a href="/" style="margin-left: 10px; padding: 10px 20px; background-color: #666; color: white; text-decoration: none; border-radius: 4px; display: inline-block;">
-          Limpar
-        </a>
-        <!-- Link que volta para a página inicial sem parâmetros (limpa a busca) -->
-      {% endif %}
-    </form>
-  </div>
-
-  <!--
-  ==========================================================================================================
-  FORMULÁRIO DE UPLOAD DE CSV
-  ==========================================================================================================
-  Este formulário permite ao usuário importar múltiplos livros de uma vez via arquivo CSV.
-  
-  Como funciona:
-  1. Usuário seleciona um arquivo CSV no computador
-  2. Clica no botão "Importar"
-  3. O arquivo é enviado para o servidor (rota /upload_csv)
-  4. O servidor lê o CSV e importa todos os livros para o banco de dados
-  5. Mostra mensagem de sucesso/erro e redireciona para a página inicial
-  
-  Formato esperado do CSV:
-    id,titulo,autor
-    1,Dom Casmurro,Machado de Assis
-    2,1984,George Orwell
-  ==========================================================================================================
-  -->
-  <div class="upload-form">
-    <form action="/upload_csv" method="post" enctype="multipart/form-data">
-      <!-- action="/upload_csv" = envia para a rota de upload -->
-      <!-- method="post" = envia os dados via corpo da requisição (não na URL) -->
-      <!-- enctype="multipart/form-data" = necessário para enviar arquivos -->
-      
-      <label for="arquivo">Importar CSV:</label>
-      <!-- Label do campo de arquivo -->
-      
-      <input type="file" id="arquivo" name="arquivo" accept=".csv" required>
-      <!-- 
-      type="file" = campo para selecionar arquivo
-      id="arquivo" = identificador único
-      name="arquivo" = nome do parâmetro que será enviado ao servidor
-      accept=".csv" = aceita apenas arquivos CSV
-      required = campo obrigatório (não pode enviar sem selecionar arquivo)
-      -->
-      
-      <button type="submit">📥 Importar</button>
-      <!-- Botão que envia o formulário -->
-    </form>
-  </div>
-
-  <!--
-  ==========================================================================================================
-  LISTA DE LIVROS
-  ==========================================================================================================
-  Esta seção exibe todos os livros cadastrados (ou os resultados da busca).
-  
-  Como funciona:
-  1. O servidor passa a lista de livros para o template via variável "livros"
-  2. Se houver livros, percorre cada um e exibe suas informações
-  3. Cada livro mostra: ID, Título e Autor
-  4. Cada livro tem um botão "Excluir" para removê-lo
-  5. Se não houver livros, mostra uma mensagem informativa
-  ==========================================================================================================
-  -->
-  {% if livros %}
-    <!-- Se a lista de livros não estiver vazia -->
-    <ul class="livros-list">
-      <!-- Lista não ordenada (sem numeração) -->
-      
-      {% for livro in livros %}
-        <!-- Loop que percorre cada livro na lista -->
-        <!-- Para cada livro, cria um item na lista -->
-        
-        <li class="livro-item">
-          <!-- Item da lista (um livro) -->
-          
-          <div class="livro-info">
-            <!-- Div com as informações do livro -->
-            <strong>ID: {{ livro.id }}</strong> — {{ livro.titulo }} <em>({{ livro.autor }})</em>
-            <!-- 
-            {{ livro.id }} = exibe o ID do livro
-            {{ livro.titulo }} = exibe o título do livro
-            {{ livro.autor }} = exibe o autor do livro
-            <strong> = texto em negrito
-            <em> = texto em itálico
-            -->
-          </div>
-          
-          <div class="livro-actions">
-            <!-- Div com os botões de ação (excluir) -->
-            
-            <form action="/livros/{{ livro.id }}/excluir" method="post" style="display: inline;" 
-                  onsubmit="return confirm('Tem certeza que deseja excluir este livro?');">
-              <!-- 
-              action="/livros/{{ livro.id }}/excluir" = envia para a rota de exclusão
-                - {{ livro.id }} é substituído pelo ID real do livro
-                - Exemplo: /livros/1/excluir
-              method="post" = método HTTP POST (usado para ações que modificam dados)
-              display: inline = faz o formulário aparecer na mesma linha (não quebra linha)
-              onsubmit = JavaScript que executa antes de enviar o formulário
-                - confirm() mostra uma caixa de diálogo perguntando se tem certeza
-                - Se o usuário clicar "Cancelar", retorna false e não envia o formulário
-                - Se clicar "OK", retorna true e envia o formulário
-              -->
-              
-              <button type="submit" class="btn-excluir">🗑️ Excluir</button>
-              <!-- Botão que envia o formulário (exclui o livro) -->
-            </form>
-          </div>
-        </li>
       {% endfor %}
-      <!-- Fim do loop -->
-    </ul>
-  {% else %}
-    <!-- Se a lista de livros estiver vazia -->
-    <div class="empty-message">
-      <!-- Mensagem quando não há livros -->
-      Nenhum livro cadastrado ainda. Importe um arquivo CSV para começar!
     </div>
-  {% endif %}
-  <!-- Fim da verificação se há livros -->
-</div>
-<!-- Fim do container principal -->
+    {% endif %}
+    {% endwith %}
+
+    <div class="forms-grid">
+      <div class="card">
+        <form action="/" method="get" class="form-group">
+          <label for="busca">Pesquisar Título</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="busca" name="busca" placeholder="Ex: O Mistério..."
+              value="{{ busca if busca else '' }}">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+          </div>
+          {% if busca %}
+          <a href="/" class="btn btn-secondary">Limpar Filtro</a>
+          {% endif %}
+        </form>
+      </div>
+
+      <div class="card">
+        <form action="/upload_csv" method="post" enctype="multipart/form-data" class="form-group">
+          <label for="arquivo">Importar Novo Relatório (CSV)</label>
+          <input type="file" id="arquivo" name="arquivo" accept=".csv" required>
+          <button type="submit" class="btn btn-primary">📥 Processar Arquivo</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="livros-grid">
+      {% if livros %}
+      {% for livro in livros %}
+      <div class="livro-card">
+        <div class="livro-main">
+          <div class="livro-header">
+            <span class="badge badge-id">ID #{{ livro.id }}</span>
+            <span class="badge badge-genero">{{ livro.GENERO }}</span>
+            <h2 class="livro-titulo">{{ livro.TITULO }}</h2>
+          </div>
+
+          <div class="livro-autor">
+            Escrito por <strong>{{ livro.nome_autor }}</strong> em {{ livro.cidade_autor }}
+          </div>
+
+          <p class="livro-sinopse">{{ livro.sinopse }}</p>
+
+          <div class="livro-footer">
+            <div class="stat-item">
+              <span>📦 Total Vendido:</span>
+              <span class="stat-value">{{ livro.total_vendas }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="livro-actions">
+          <form action="/livros/{{ livro.id }}/excluir" method="post"
+            onsubmit="return confirm('Excluir este livro permanentemente?');">
+            <button type="submit" class="btn btn-danger">🗑️</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="card empty-state">
+        <p>Nenhum dado encontrado. Faça a importação de um relatório CSV para começar.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
 
 </body>
+
 </html>
-<!-- Fim do arquivo HTML -->

@@ -30,21 +30,21 @@ try:
     
     # Testa se a tabela existe
     cursor = conn.cursor()
-    cursor.execute("SHOW TABLES LIKE 'livros'")
+    cursor.execute("SHOW TABLES LIKE 'livro'")
     result = cursor.fetchone()
     
     if result:
-        print("[OK] Tabela 'livros' encontrada!")
+        print("[OK] Tabela 'livro' encontrada!")
         
         # Verifica estrutura da tabela
-        cursor.execute("DESCRIBE livros")
+        cursor.execute("DESCRIBE livro")
         columns = cursor.fetchall()
         print("\nEstrutura da tabela:")
         for col in columns:
             print(f"  - {col[0]} ({col[1]})")
     else:
-        print("[ERRO] Tabela 'livros' nao encontrada!")
-        print("   Execute o CREATE TABLE primeiro.")
+        print("[ERRO] Tabela 'livro' nao encontrada!")
+        print("   Verifique se rodou o script de criacao.")
     
     cursor.close()
     conn.close()

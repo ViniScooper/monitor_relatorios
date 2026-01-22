@@ -1,101 +1,21 @@
-id,titulo,autor
-1,Dom Casmurro,Machado de Assis
-2,1984,George Orwell
-3,Harry Potter e a Pedra Filosofal,J.K. Rowling
-4,O Senhor dos Anéis: A Sociedade do Anel,J.R.R. Tolkien
-5,O Hobbit,J.R.R. Tolkien
-6,A Revolução dos Bichos,George Orwell
-7,Capitães da Areia,Jorge Amado
-8,O Alquimista,Paulo Coelho
-9,Memórias Póstumas de Brás Cubas,Machado de Assis
-10,O Pequeno Príncipe,Antoine de Saint-Exupéry
-11,Harry Potter e a Câmara Secreta,J.K. Rowling
-12,Harry Potter e o Prisioneiro de Azkaban,J.K. Rowling
-13,Harry Potter e o Cálice de Fogo,J.K. Rowling
-14,Harry Potter e a Ordem da Fênix,J.K. Rowling
-15,Harry Potter e o Enigma do Príncipe,J.K. Rowling
-16,Harry Potter e as Relíquias da Morte,J.K. Rowling
-17,O Código Da Vinci,Dan Brown
-18,Anjos e Demônios,Dan Brown
-19,Inferno,Dan Brown
-20,O Silmarillion,J.R.R. Tolkien
-21,Crime e Castigo,Fiódor Dostoiévski
-22,Os Irmãos Karamázov,Fiódor Dostoiévski
-23,Guerra e Paz,Leon Tolstói
-24,Anna Kariênina,Leon Tolstói
-25,O Morro dos Ventos Uivantes,Emily Brontë
-26,Orgulho e Preconceito,Jane Austen
-27,Emma,Jane Austen
-28,Sense e Sensibilidade,Jane Austen
-29,O Apanhador no Campo de Centeio,J.D. Salinger
-30,O Grande Gatsby,F. Scott Fitzgerald
-31,Admirável Mundo Novo,Aldous Huxley
-32,Fahrenheit 451,Ray Bradbury
-33,O Nome do Vento,Patrick Rothfuss
-34,A Crônica do Matador do Rei: O Temor do Sábio,Patrick Rothfuss
-35,Duna,Frank Herbert
-36,Duna Messiah,Frank Herbert
-37,Fundação,Isaac Asimov
-38,Fundação e Império,Isaac Asimov
-39,Segunda Fundação,Isaac Asimov
-40,Eu, Robô,Isaac Asimov
-41,O Guia do Mochileiro das Galáxias,Douglas Adams
-42,O Restaurante no Fim do Universo,Douglas Adams
-43,A Vida, o Universo e Tudo Mais,Douglas Adams
-44,It: A Coisa,Stephen King
-45,O Iluminado,Stephen King
-46,Doutor Sono,Stephen King
-47,A Espera de um Milagre,Stephen King
-48,O Cemitério,Stephen King
-49,Ensaio Sobre a Cegueira,José Saramago
-50,O Homem Duplicado,José Saramago
-51,O Conto da Aia,Margaret Atwood
-52,Oryx e Crake,Margaret Atwood
-53,A Menina que Roubava Livros,Markus Zusak
-54,Jogos Vorazes,Suzanne Collins
-55,Em Chamas,Suzanne Collins
-56,A Esperança,Suzanne Collins
-57,Crepúsculo,Stephenie Meyer
-58,Lua Nova,Stephenie Meyer
-59,Eclipse,Stephenie Meyer
-60,Amanhecer,Stephenie Meyer
-61,O Leão, a Feiticeira e o Guarda-Roupa,C.S. Lewis
-62,O Príncipe Caspian,C.S. Lewis
-63,A Viagem do Peregrino da Alvorada,C.S. Lewis
-64,As Crônicas de Nárnia,C.S. Lewis
-65,O Diário de Anne Frank,Anne Frank
-66,A Cabana,William P. Young
-67,O Velho e o Mar,Ernest Hemingway
-68,Por Quem os Sinos Dobram,Ernest Hemingway
-69,A Metamorfose,Franz Kafka
-70,O Processo,Franz Kafka
-71,O Estrangeiro,Albert Camus
-72,A Peste,Albert Camus
-73,O Retrato de Dorian Gray,Oscar Wilde
-74,Drácula,Bram Stoker
-75,Frankenstein,Mary Shelley
-76,A Ilha do Tesouro,Robert Louis Stevenson
-77,Robinson Crusoé,Daniel Defoe
-78,As Aventuras de Sherlock Holmes,Arthur Conan Doyle
-79,O Cão dos Baskervilles,Arthur Conan Doyle
-80,O Hobbit: Uma Jornada Inesperada,J.R.R. Tolkien
-81,O Ladrão de Raios,Rick Riordan
-82,O Mar de Monstros,Rick Riordan
-83,A Maldição do Titã,Rick Riordan
-84,A Batalha do Labirinto,Rick Riordan
-85,O Último Olimpiano,Rick Riordan
-86,A Culpa é das Estrelas,John Green
-87,Cidades de Papel,John Green
-88,Quem é Você, Alasca?,John Green
-89,O Diário de um Banana,Jeff Kinney
-90,A Menina do Trem,Paula Hawkins
-91,O Código dos Bilionários,Ben Mezrich
-92,Steve Jobs,Walter Isaacson
-93,Sapiens,Yuval Noah Harari
-94,Homo Deus,Yuval Noah Harari
-95,21 Lições para o Século 21,Yuval Noah Harari
-96,Pai Rico Pai Pobre,Robert Kiyosaki
-97,O Poder do Hábito,Charles Duhigg
-98,Hábitos Atômicos,James Clear
-99,A Arte da Guerra,Sun Tzu
-100,O Príncipe,Nicolau Maquiavel
+CODG_AUTOR_PK,NOME,DATA_NASCIMENTO,CIDADE,CODG_LIVRO_PK,TITULO,GENERO,SINOSPE,CODG_AUTOR_FK,CODG_VENDA_PK,LOCAL,QUANTIDADE,CODG_LIVRO_FK
+1,João Silva,1975-03-12,São Paulo,1,O Mistério da Lua,Ficção,"Um livro sobre aventuras lunares",1,1,São Paulo,10,1
+1,João Silva,1975-03-12,São Paulo,2,Aventuras na Selva,Aventura,"Explorando florestas e animais selvagens",1,2,Rio de Janeiro,5,2
+2,Ana Maria,1980-07-21,Rio de Janeiro,3,A Vida é Bela,Romance,"História emocionante de amor e superação",2,3,Belo Horizonte,8,3
+2,Ana Maria,1980-07-21,Rio de Janeiro,4,O Poder do Hábito,Autoajuda,"Como formar hábitos positivos",2,4,Curitiba,12,4
+3,Carlos Souza,1965-11-30,Belo Horizonte,5,História do Brasil,História,"Um resumo detalhado da história do Brasil",3,5,Salvador,7,5
+3,Carlos Souza,1965-11-30,Belo Horizonte,6,Guerras e Conflitos,História,"Análise das principais guerras mundiais",3,6,São Paulo,3,6
+4,Julia Lima,1990-02-15,Curitiba,7,Aprendendo Python,Tecnologia,"Guia prático de Python para iniciantes",4,7,Rio de Janeiro,6,7
+4,Julia Lima,1990-02-15,Curitiba,8,Java Avançado,Tecnologia,"Conceitos avançados de Java",4,8,Belo Horizonte,2,8
+5,Fernanda Alves,1985-09-10,Salvador,9,Viagem ao Centro da Terra,Aventura,"Uma viagem fantástica pelo centro do planeta",5,9,Curitiba,4,9
+5,Fernanda Alves,1985-09-10,Salvador,10,Mundos Perdidos,Ficção,"Exploração de civilizações antigas",5,10,Salvador,1,10
+6,Luis Pereira,1972-01-05,Fortaleza,11,Segredos do Universo,Ficção,"Descobertas cósmicas e viagens espaciais",6,11,São Paulo,15,11
+6,Luis Pereira,1972-01-05,Fortaleza,12,Código da Vida,Saúde,"Entendendo a biologia humana",6,12,Rio de Janeiro,7,12
+7,Roberto Lima,1988-06-20,Brasília,13,Economia para Todos,Economia,"Princípios básicos de economia",7,13,Belo Horizonte,8,13
+7,Roberto Lima,1988-06-20,Brasília,14,Investimentos Inteligentes,Economia,"Como investir de forma eficiente",7,14,Curitiba,12,14
+8,Marcos Vinicius,1992-11-11,Recife,15,Arte Moderna,Arte,"Estudo da arte contemporânea",8,15,Salvador,7,15
+8,Marcos Vinicius,1992-11-11,Recife,16,Pintura Clássica,Arte,"Grandes obras da história da pintura",8,16,São Paulo,3,16
+9,Beatriz Santos,1978-04-18,Porto Alegre,17,Culinária Brasileira,Culinária,"Receitas típicas do Brasil",9,17,Rio de Janeiro,6,17
+9,Beatriz Santos,1978-04-18,Porto Alegre,18,Culinária Internacional,Culinária,"Receitas do mundo todo",9,18,Belo Horizonte,2,18
+10,Mariana Costa,1983-12-22,Florianópolis,19,Viagens pelo Mundo,Viagem,"Relatos e dicas de viagens internacionais",10,19,Curitiba,9,19
+10,Mariana Costa,1983-12-22,Florianópolis,20,Aventura na Montanha,Aventura,"Escaladas e aventuras radicais",10,20,Salvador,4,20

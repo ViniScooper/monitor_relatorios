@@ -2,6 +2,13 @@ import os  # Sistema operacional para manipular caminhos de arquivos
 import mysql.connector  # Conector oficial do MySQL
 from dotenv import load_dotenv  # Carrega variáveis do arquivo de configuração (env)
 
+
+
+
+
+
+
+
 # -----------------------------------------------------------------------------------------
 # CONFIGURAÇÃO DE AMBIENTE
 # -----------------------------------------------------------------------------------------
@@ -30,6 +37,24 @@ def get_conn():
         print(f"Erro ao conectar ao MySQL: {err}")
         raise
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# -----------------------------------------------------------------------------------------
+# FUNÇÕES PARA MANIPULAÇÃO DE LIVROS
+# -----------------------------------------------------------------------------------------
 def carregar_livros_do_banco():
     """
     Executa um comando SELECT para trazer todos os livros cadastrados.
@@ -37,9 +62,24 @@ def carregar_livros_do_banco():
     """
     try:
         conn = get_conn()
-        # dictionary=True faz o banco devolver {'titulo': '...', 'autor': '...'} em vez de tupla
         cur = conn.cursor(dictionary=True)
-        cur.execute("SELECT codg_livro_pk as id, titulo, autor FROM livros ORDER BY codg_livro_pk")
+
+        cur.execute("""
+            SELECT 
+                l.CODG_LIVRO_PK as id,
+                l.TITULO,
+                l.GENERO, 
+                l.SINOSPE as sinopse,
+                a.NOME as nome_autor,
+                a.CIDADE as cidade_autor,
+                COALESCE(SUM(v.QUANTIDADE), 0) as total_vendas
+            FROM livro l
+            LEFT JOIN autor a ON l.CODG_AUTOR_FK = a.CODG_AUTOR_PK
+            LEFT JOIN vendas v ON l.CODG_LIVRO_PK = v.CODG_LIVRO_FK
+            GROUP BY l.CODG_LIVRO_PK, l.TITULO, l.GENERO, l.SINOSPE, a.NOME, a.CIDADE
+            ORDER BY total_vendas DESC
+        """)
+
         livros = cur.fetchall()
         cur.close()
         conn.close()
@@ -48,26 +88,70 @@ def carregar_livros_do_banco():
         print(f"Erro ao carregar livros do banco: {err}")
         return []
 
-def salvar_livro_no_banco(livro: dict):
+
+
+
+
+
+
+
+
+
+
+
+
+# -----------------------------------------------------------------------------------------
+# FUNÇÕES PARA MANIPULAÇÃO DE LIVROS
+# -----------------------------------------------------------------------------------------
+
+def importar_linha_csv(cursor, row, autores_vistos, livros_vistos):
     """
-    Salva ou atualiza um livro (Lógica de UPSERT).
-    Se o ID já existir, atualiza. Se não existir, insere um novo.
+    Insere os dados de uma linha do CSV nas tabelas correspondentes.
+    Usa ON DUPLICATE KEY UPDATE para evitar erros de duplicidade.
     """
-    try:
-        conn = get_conn()
-        cur = conn.cursor()
-        # ON DUPLICATE KEY UPDATE: Parte mágica do SQL que decide entre salvar novo ou atualizar velho
-        cur.execute(
-            "INSERT INTO livros (codg_livro_pk, titulo, autor) VALUES (%s, %s, %s) "
-            "ON DUPLICATE KEY UPDATE titulo=VALUES(titulo), autor=VALUES(autor)",
-            (livro["id"], livro.get("titulo", ""), livro.get("autor", "")),
+    # -------------------------------
+    # Inserir AUTOR
+    codg_autor = int(row["CODG_AUTOR_PK"])
+    if codg_autor not in autores_vistos:
+        cursor.execute(
+            "INSERT INTO autor (CODG_AUTOR_PK, NOME, DATA_NASCIMENTO, CIDADE) "
+            "VALUES (%s, %s, %s, %s) "
+            "ON DUPLICATE KEY UPDATE NOME=VALUES(NOME), DATA_NASCIMENTO=VALUES(DATA_NASCIMENTO), CIDADE=VALUES(CIDADE)",
+            (codg_autor, row["NOME"], row["DATA_NASCIMENTO"], row["CIDADE"])
         )
-        conn.commit()  # ESSENCIAL: Sem isso, as mudanças não são gravadas no disco
-        cur.close()
-        conn.close()
-    except mysql.connector.Error as err:
-        print(f"Erro ao salvar livro no banco: {err}")
-        raise
+        autores_vistos.add(codg_autor)
+
+    # -------------------------------
+    # Inserir LIVRO
+    codg_livro = int(row["CODG_LIVRO_PK"])
+    if codg_livro not in livros_vistos:
+        # Nota: Usamos SINOSPE conforme a estrutura da tabela do usuário
+        cursor.execute(
+            "INSERT INTO livro (CODG_LIVRO_PK, TITULO, GENERO, SINOSPE, CODG_AUTOR_FK) "
+            "VALUES (%s, %s, %s, %s, %s) "
+            "ON DUPLICATE KEY UPDATE TITULO=VALUES(TITULO), GENERO=VALUES(GENERO), SINOSPE=VALUES(SINOSPE), CODG_AUTOR_FK=VALUES(CODG_AUTOR_FK)",
+            (codg_livro, row["TITULO"], row["GENERO"], row["SINOSPE"], codg_autor)
+        )
+        livros_vistos.add(codg_livro)
+
+
+
+    # -------------------------------
+    # Inserir VENDAS
+    codg_venda = int(row["CODG_VENDA_PK"])
+    # Nota: A tabela vendas no banco do usuário usa a coluna CIDADE, no snippet estava LOCAL
+    cursor.execute(
+        "INSERT INTO vendas (CODG_VENDA_PK, CIDADE, QUANTIDADE, CODG_LIVRO_FK) "
+        "VALUES (%s, %s, %s, %s) "
+        "ON DUPLICATE KEY UPDATE CIDADE=VALUES(CIDADE), QUANTIDADE=VALUES(QUANTIDADE), CODG_LIVRO_FK=VALUES(CODG_LIVRO_FK)",
+        (codg_venda, row["LOCAL"], int(row["QUANTIDADE"]), codg_livro)
+    )
+
+
+
+
+
+
 
 def excluir_livro_do_banco(id: int):
     """
@@ -76,9 +160,11 @@ def excluir_livro_do_banco(id: int):
     try:
         conn = get_conn()
         cur = conn.cursor()
-        cur.execute("DELETE FROM livros WHERE codg_livro_pk = %s", (id,))
+        # Deletar vendas primeiro devido a FK (opcional se houver ON DELETE CASCADE)
+        cur.execute("DELETE FROM vendas WHERE CODG_LIVRO_FK = %s", (id,))
+        cur.execute("DELETE FROM livro WHERE CODG_LIVRO_PK = %s", (id,))
         conn.commit()
-        rows_affected = cur.rowcount  # Verifica se alguma linha foi realmente apagada
+        rows_affected = cur.rowcount
         cur.close()
         conn.close()
         return rows_affected > 0
