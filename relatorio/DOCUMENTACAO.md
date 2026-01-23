@@ -54,6 +54,7 @@ Endpoints para integração com outros sistemas:
 *   `GET /api/livros`: Lista completa de livros com estatísticas.
 *   `GET /api/livros/<id>`: Detalhes de um livro específico.
 *   `DELETE /api/livros/<id>`: Remoção de registros.
+*   `POST /api/livros/`: ADICIONAR LIVROS.
 
 ---
 

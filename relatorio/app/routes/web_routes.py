@@ -36,21 +36,23 @@ def pagina_inicial():
             conn = get_conn()
             cur = conn.cursor(dictionary=True)
             cur.execute("""
-                SELECT 
-                    l.CODG_LIVRO_PK as id,
-                    l.TITULO,
-                    l.GENERO, 
-                    l.SINOSPE as sinopse,
-                    a.NOME as nome_autor,
-                    a.CIDADE as cidade_autor,
-                    COALESCE(SUM(v.QUANTIDADE), 0) as total_vendas
-                FROM livro l
-                LEFT JOIN autor a ON l.CODG_AUTOR_FK = a.CODG_AUTOR_PK
-                LEFT JOIN vendas v ON l.CODG_LIVRO_PK = v.CODG_LIVRO_FK
-                WHERE l.TITULO LIKE %s
-                GROUP BY l.CODG_LIVRO_PK, l.TITULO, l.GENERO, l.SINOSPE, a.NOME, a.CIDADE
-                ORDER BY total_vendas DESC
-            """, (f"%{nome_busca}%",))
+             
+                            
+                SELECT * FROM view_relatorio_livros 
+                    WHERE TITULO LIKE %s 
+                    ORDER BY total_vendas DESC
+
+
+
+
+
+
+
+            """
+                        
+
+                        
+                        , (f"%{nome_busca}%",))
             livros = cur.fetchall()
             cur.close()
             conn.close()
@@ -85,7 +87,8 @@ def upload_csv():
     
     try:
         # Wrapper para tratar o arquivo enviado como texto (CSV)
-        reader = csv.DictReader(TextIOWrapper(file, encoding="utf-8"))
+        # utf-8-sig lida com arquivos salvos com BOM (comum no Windows/Excel)
+        reader = csv.DictReader(TextIOWrapper(file, encoding="utf-8-sig"))
         
         conn = get_conn()
         cursor = conn.cursor()

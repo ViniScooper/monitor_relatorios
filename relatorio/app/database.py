@@ -121,18 +121,23 @@ def importar_linha_csv(cursor, row, autores_vistos, livros_vistos):
         )
         autores_vistos.add(codg_autor)
 
+
+
     # -------------------------------
     # Inserir LIVRO
     codg_livro = int(row["CODG_LIVRO_PK"])
     if codg_livro not in livros_vistos:
-        # Nota: Usamos SINOSPE conforme a estrutura da tabela do usuário
+        # Nota: Usamos SINOSPE para a coluna do banco, mas SINOPSE para ler do CSV
         cursor.execute(
             "INSERT INTO livro (CODG_LIVRO_PK, TITULO, GENERO, SINOSPE, CODG_AUTOR_FK) "
             "VALUES (%s, %s, %s, %s, %s) "
             "ON DUPLICATE KEY UPDATE TITULO=VALUES(TITULO), GENERO=VALUES(GENERO), SINOSPE=VALUES(SINOSPE), CODG_AUTOR_FK=VALUES(CODG_AUTOR_FK)",
-            (codg_livro, row["TITULO"], row["GENERO"], row["SINOSPE"], codg_autor)
+            (codg_livro, row["TITULO"], row["GENERO"], row["SINOPSE"], codg_autor)
         )
         livros_vistos.add(codg_livro)
+
+
+
 
 
 
@@ -163,7 +168,7 @@ def excluir_livro_do_banco(id: int):
         # Deletar vendas primeiro devido a FK (opcional se houver ON DELETE CASCADE)
         cur.execute("DELETE FROM vendas WHERE CODG_LIVRO_FK = %s", (id,))
         cur.execute("DELETE FROM livro WHERE CODG_LIVRO_PK = %s", (id,))
-  #      cur.execute("DELETE FROM autor WHERE CODG_AUTOR_PK = %s", (id,))
+       #cur.execute("DELETE FROM autor WHERE CODG_AUTOR_PK = %s", (id,))
         conn.commit()
         rows_affected = cur.rowcount
         cur.close()

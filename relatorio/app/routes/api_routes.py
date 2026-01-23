@@ -9,6 +9,9 @@ import mysql.connector
 # Criação do Blueprint da API.
 api_bp = Blueprint('api', __name__)
 
+
+
+
 # -----------------------------------------------------------------------------------------
 # ROTAS DA API REST (Retornam JSON)
 # -----------------------------------------------------------------------------------------
@@ -26,19 +29,10 @@ def obter_livro_por_id(id):
         conn = get_conn()
         cur = conn.cursor(dictionary=True)
         cur.execute("""
-            SELECT 
-                l.CODG_LIVRO_PK as id,
-                l.TITULO,
-                l.GENERO, 
-                l.SINOSPE as sinopse,
-                a.NOME as nome_autor,
-                a.CIDADE as cidade_autor,
-                COALESCE(SUM(v.QUANTIDADE), 0) as total_vendas
-            FROM livro l
-            LEFT JOIN autor a ON l.CODG_AUTOR_FK = a.CODG_AUTOR_PK
-            LEFT JOIN vendas v ON l.CODG_LIVRO_PK = v.CODG_LIVRO_FK
-            WHERE l.CODG_LIVRO_PK = %s
-            GROUP BY l.CODG_LIVRO_PK, l.TITULO, l.GENERO, l.SINOSPE, a.NOME, a.CIDADE
+                    
+                    
+        SELECT * FROM  view_relatorio_livros;      
+
         """, (id,))
         livro = cur.fetchone()
         cur.close()

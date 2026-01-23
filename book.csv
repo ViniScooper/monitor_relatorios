@@ -19,3 +19,43 @@ CODG_AUTOR_PK,NOME,DATA_NASCIMENTO,CIDADE,CODG_LIVRO_PK,TITULO,GENERO,SINOSPE,CO
 9,Beatriz Santos,1978-04-18,Porto Alegre,18,Culinária Internacional,Culinária,"Receitas do mundo todo",9,18,Belo Horizonte,2,18
 10,Mariana Costa,1983-12-22,Florianópolis,19,Viagens pelo Mundo,Viagem,"Relatos e dicas de viagens internacionais",10,19,Curitiba,9,19
 10,Mariana Costa,1983-12-22,Florianópolis,20,Aventura na Montanha,Aventura,"Escaladas e aventuras radicais",10,20,Salvador,4,20
+11,Carlos Mendes,1978-05-14,São Paulo,21,Mistério do Relógio,Policial,"Um crime ligado a um antigo relógio",11,21,Rio de Janeiro,2,21
+12,Ana Ribeiro,1990-09-03,Belo Horizonte,22,Sombras do Passado,Drama,"Segredos familiares vêm à tona",12,22,Curitiba,5,22
+13,Lucas Almeida,1985-02-19,Porto Alegre,23,O Código Perdido,Tecnologia,"Uma conspiração digital global",13,23,São Paulo,3,23
+14,Paula Nogueira,1992-11-27,Campinas,24,Além do Horizonte,Ficção,"Exploração espacial inesperada",14,24,Recife,6,24
+15,Rafael Torres,1976-07-08,Rio de Janeiro,25,O Último Guardião,Fantasia,"Um reino ameaçado pelas trevas",15,25,Manaus,4,25
+16,Juliana Freitas,1988-01-15,Natal,26,Maré Alta,Romance,"Um amor à beira-mar",16,26,Fortaleza,7,26
+17,Fernando Lima,1981-06-30,Goiânia,27,O Jogo da Verdade,Suspense,"Mentiras que custam vidas",17,27,Brasília,2,27
+18,Beatriz Rocha,1995-04-11,Santos,28,Entre Linhas,Poesia,"Reflexões sobre o cotidiano",18,28,Santos,9,28
+19,Diego Pacheco,1983-10-02,Uberlândia,29,Rota de Colisão,Ação,"Perseguições em alta velocidade",19,29,Belém,5,29
+20,Renata Azevedo,1979-08-21,Vitória,30,Silêncio Mortal,Terror,"Uma cidade dominada pelo medo",20,30,Porto Velho,3,30
+21,André Farias,1986-03-09,João Pessoa,31,Marcas do Tempo,Histórico,"Uma viagem ao Brasil colonial",21,31,Olinda,6,31
+22,Patrícia Cunha,1991-12-18,Maceió,32,Labirinto Mental,Psicologia,"Os limites da mente humana",22,32,Aracaju,4,32
+23,Bruno Teixeira,1984-09-25,Ribeirão Preto,33,Onda Digital,Tecnologia,"O impacto das redes sociais",23,33,São José dos Campos,8,33
+24,Vanessa Lopes,1993-02-07,Taubaté,34,Destino Cruzado,Romance,"Vidas ligadas pelo acaso",24,34,Campos do Jordão,2,34
+25,Gustavo Barros,1975-11-13,Blumenau,35,A Floresta Viva,Aventura,"Sobrevivência na selva",25,35,Rio Branco,5,35
+26,Helena Prado,1989-06-01,Limeira,36,Notas de Liberdade,Biografia,"A história de uma líder social",26,36,São Luís,3,36
+27,Igor Matos,1994-01-29,Osasco,37,Fragmentos de Nós,Drama,"Relações humanas em crise",27,37,Barueri,6,37
+28,Carolina Guedes,1987-08-16,Petrópolis,38,Além do Medo,Suspense,"Enfrentando traumas do passado",28,38,Teresópolis,4,38
+29,Thiago Rangel,1982-05-05,Resende,39,Ordem Invisível,Ficção,"Uma sociedade secreta",29,39,Volta Redonda,7,39
+30,Daniela Pires,1996-10-12,Jundiaí,40,Entre Estações,Romance,"Amores que vão e vêm",30,40,Sorocaba,5,40
+31,Fábio Moreira,1977-03-22,Franca,41,Impacto Final,Ação,"Missão contra o tempo",31,41,Campinas,4,41
+32,Larissa Fontes,1990-07-19,Piracicaba,42,Versos Soltos,Poesia,"Sentimentos em palavras",32,42,Piracicaba,10,42
+33,Marcos Silveira,1985-12-04,Araraquara,43,O Último Código,Tecnologia,"Segredos de uma IA",33,43,São Carlos,6,43
+34,Natália Rios,1992-09-14,Araçatuba,44,Laços Invisíveis,Drama,"Conexões inesperadas",34,44,Bauru,3,44
+35,Roberto Neves,1974-04-28,Marília,45,Caminho Sombrio,Terror,"Uma estrada amaldiçoada",35,45,Assis,2,45
+36,Amanda Leal,1988-11-09,Itu,46,Jardim Secreto,Romance,"Um refúgio para o coração",36,46,Salto,8,46
+37,Pedro Antunes,1981-01-17,Votuporanga,47,Arena Final,Ação,"Competição mortal",37,47,Catanduva,5,47
+38,Sabrina Falcão,1995-06-26,Indaiatuba,48,Mente Aberta,Psicologia,"Autoconhecimento e mudança",38,48,Hortolândia,4,48
+39,Rodrigo Paiva,1979-08-31,Paulínia,49,Além do Código,Tecnologia,"Hackers e governos",39,49,Sumaré,6,49
+40,Cláudia Motta,1986-02-13,Lorena,50,Entre Mundos,Ficção,"Realidades paralelas",40,50,Piquete,7,50
+41,Henrique Bastos,1983-09-07,Cruzeiro,51,Chamas da Guerra,Histórico,"Conflitos esquecidos",41,51,Guaratinguetá,3,51
+42,Isabela Dornelles,1991-05-20,Aparecida,52,Corações em Fuga,Romance,"Escolhas difíceis",42,52,Taubaté,6,52
+43,Leonardo Kopp,1978-12-02,Jacareí,53,O Eco do Medo,Terror,"Um passado que retorna",43,53,São José dos Campos,4,53
+44,Priscila Moraes,1994-07-18,Caraguatatuba,54,Mar Aberto,Aventura,"Viagem sem volta",44,54,Ubatuba,5,54
+45,Victor Salles,1980-10-09,Ilhabela,55,Naufrágio,Ficção,"Sobreviventes no oceano",45,55,Santos,2,55
+46,Monique Tavares,1987-01-05,Guarujá,56,Som do Silêncio,Drama,"Vozes que não se ouvem",46,56,Guarujá,8,56
+47,Eduardo Peixoto,1982-06-11,Mongaguá,57,Última Chance,Suspense,"Nada a perder",47,57,Itanhaém,3,57
+48,Flávia Noronha,1993-03-23,Peruíbe,58,Luz Interior,Autoajuda,"Crescimento pessoal",48,58,Registro,9,58
+49,Ricardo Beltrão,1976-09-30,Miracatu,59,Terra Prometida,Histórico,"Migrações e esperança",49,59,Sete Barras,4,59
+50,Sueli Batista,1989-12-01,Juquiá,60,Raízes do Tempo,Drama,"Memórias de gerações",50,60,Cajati,6,60
