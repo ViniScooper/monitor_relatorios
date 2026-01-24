@@ -1,0 +1,65 @@
+================================================================================
+📋 BACKLOG DE ATIVIDADES - SISTEMA DE MONITORAMENTO (SENIOR REVIEW)
+================================================================================
+
+Fala Júnior, analisei o estado atual da nossa aplicação e identifiquei dois 
+pontos críticos que precisamos atacar para garantir a escalabilidade do sistema. 
+Atualmente, estamos carregando tudo de uma vez, o que vai "matar" o navegador do 
+usuário quando o CSV tiver milhares de linhas.
+
+Abaixo, listei os desafios. Foco na modulação e performance. Qualquer dúvida 
+me chama no Slack.
+
+--------------------------------------------------------------------------------
+🚀 TAREFA 1: IMPLEMENTAÇÃO DE CARREGAMENTO SOB DEMANDA (PAGINAÇÃO/LIMIT)
+--------------------------------------------------------------------------------
+PROBLEMA: A rota principal renderiza todos os livros de uma vez. Isso gera um 
+DOM pesado e lentidão no carregamento inicial.
+
+OBJETIVO: Limitar a exibição inicial a 10 livros e adicionar um botão 
+"Carregar Mais" no final da lista.
+
+ONDE MEXER:
+1. Arquivo: `relatorio/app/database.py`
+   - Função: `carregar_livros_do_banco()`
+   - Ação: Adicionar parâmetros `limit` e `offset` à função e injetar na 
+     query SQL (Ex: LIMIT 10 OFFSET X).
+
+2. Arquivo: `relatorio/app/routes/web_routes.py`
+   - Função: `pagina_inicial()`
+   - Ação: Capturar um parâmetro `page` via query string (request.args) para 
+     controlar o deslocamento (offset) dos dados.
+
+3. Arquivo: `relatorio/templates/index.html`
+   - Ação: Criar o botão "Ver Mais" e uma função JavaScript (Fetch API) para 
+     buscar os próximos 10 registros e dar um "append" no grid atual sem 
+     recarregar a página inteira.
+
+--------------------------------------------------------------------------------
+💾 TAREFA 2: ABSTRAÇÃO DE INGESTÃO COM STORED PROCEDURES (SQL)
+--------------------------------------------------------------------------------
+PROBLEMA: O código Python está "sujo" com muitos INSERTs manuais e lógica de 
+banco (ON DUPLICATE KEY). Isso deve ser responsabilidade do banco de dados.
+
+OBJETIVO: Criar uma Stored Procedure (PRC) no MySQL para gerenciar a inserção 
+dos dados e apenas chamá-la via Python.
+
+ONDE MEXER:
+1. Banco de Dados (MySQL):
+   - Ação: Criar uma procedure (ex: `sp_importar_registro_csv`) que receba 
+     todos os campos de uma linha e execute os 3 inserts (Autor, Livro, Vendas) 
+     dentro de uma transação.
+
+2. Arquivo: `relatorio/app/database.py`
+   - Função: `importar_linha_csv()`
+   - Ação: Remover os blocos de `cursor.execute("INSERT...")` e substituir 
+     pela chamada da procedure: `cursor.callproc('sp_importar_registro_csv', [args...])`.
+
+--------------------------------------------------------------------------------
+🎯 CRITÉRIOS DE ACEITE:
+- O Dashboard deve abrir em menos de 1 segundo.
+- O código Python não deve conter lógica complexa de SQL (CRUD simples).
+- Ao clicar em "Carregar Mais", os novos itens devem aparecer suavemente.
+
+Bom trabalho, vamos pra cima! 🚀
+================================================================================

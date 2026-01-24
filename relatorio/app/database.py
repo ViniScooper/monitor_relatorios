@@ -65,6 +65,7 @@ def carregar_livros_do_banco():
         cur = conn.cursor(dictionary=True)
 
         cur.execute("""
+                    
             SELECT 
                 l.CODG_LIVRO_PK as id,
                 l.TITULO,
@@ -78,6 +79,8 @@ def carregar_livros_do_banco():
             LEFT JOIN vendas v ON l.CODG_LIVRO_PK = v.CODG_LIVRO_FK
             GROUP BY l.CODG_LIVRO_PK, l.TITULO, l.GENERO, l.SINOSPE, a.NOME, a.CIDADE
             ORDER BY total_vendas DESC
+                    
+
         """)
 
         livros = cur.fetchall()
@@ -87,14 +90,6 @@ def carregar_livros_do_banco():
     except mysql.connector.Error as err:
         print(f"Erro ao carregar livros do banco: {err}")
         return []
-
-
-
-
-
-
-
-
 
 
 
@@ -123,16 +118,17 @@ def importar_linha_csv(cursor, row, autores_vistos, livros_vistos):
 
 
 
+
     # -------------------------------
     # Inserir LIVRO
     codg_livro = int(row["CODG_LIVRO_PK"])
     if codg_livro not in livros_vistos:
-        # Nota: Usamos SINOSPE para a coluna do banco, mas SINOPSE para ler do CSV
+        # Nota: O CSV usa a coluna 'SINOSPE' (com erro de grafia)
         cursor.execute(
             "INSERT INTO livro (CODG_LIVRO_PK, TITULO, GENERO, SINOSPE, CODG_AUTOR_FK) "
             "VALUES (%s, %s, %s, %s, %s) "
             "ON DUPLICATE KEY UPDATE TITULO=VALUES(TITULO), GENERO=VALUES(GENERO), SINOSPE=VALUES(SINOSPE), CODG_AUTOR_FK=VALUES(CODG_AUTOR_FK)",
-            (codg_livro, row["TITULO"], row["GENERO"], row["SINOPSE"], codg_autor)
+            (codg_livro, row["TITULO"], row["GENERO"], row["SINOSPE"], codg_autor)
         )
         livros_vistos.add(codg_livro)
 
