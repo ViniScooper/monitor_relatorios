@@ -112,10 +112,12 @@ instance/
 # ------------------------------------------------------------------------------------------------------------
 # Arquivos de teste (se não quiser versionar)
 # test_*.py
-# *_test.py
+*TASKS_BACKLOG.txt
+*ESTRUTURA.md
+*DOCUMENTACAO.md
 
 # Arquivos CSV de exemplo/teste (opcional - descomente se não quiser versionar)
-# *.csv
+*book.csv
 
 # ============================================================================================================
 # FIM DO ARQUIVO .GITIGNORE
