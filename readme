@@ -1,28 +1,5 @@
-estou fazendo testes de perfomace no banco vou usar mysql como o database
+No backend, foi implementada uma paginação real diretamente no banco de dados usando LIMIT e OFFSET, permitindo que apenas pequenos conjuntos de registros sejam carregados por vez, mesmo com grandes volumes de dados. A lógica de importação de arquivos CSV foi centralizada em stored procedures, reduzindo o tráfego entre aplicação e banco e garantindo integridade dos dados. Também houve padronização dos nomes das colunas retornadas pelo banco para evitar erros no frontend.
 
-primeiro passo vou inserir mais dados atraves de planilha
+Na importação de dados, o sistema passou a reconhecer automaticamente variações no nome da coluna de sinopse, evitando falhas comuns em arquivos CSV.
 
-depois irei ver a perfomace quando o user fizer a consulta na tela atraves da api
-
-
-irei criar um index  para melhorar a busca pelo titulo e a consulta seja mais  rapida
-
-depois irei refazer o squema 
-
-na minha cabeça vai ser assim o squema assim relacional
-
-autores-  livros -  - data dos livros  - livro mais vendido
-
-
-para deixar a consulta robustamxcmzxxmxmmxmmmm
-
- um pouco e depois criar views para ajudar nas    
-consultasdas
-sdad
-sada
-sadadsa     
-
-
-   
-
-     
+No frontend, a navegação foi modernizada com paginação por setas e exibição do total de páginas. A troca de páginas ocorre sem recarregar a tela, mantendo filtros ativos e exibindo feedback visual durante o carregamento.
