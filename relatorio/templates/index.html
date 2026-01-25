@@ -171,10 +171,16 @@
       border: 1px solid #fecaca;
     }
 
+    /* Estilos do grid de livros com rolagem interna */
     .livros-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 20px;
+      border: 2px solid #1e293b;
+      border-radius: 16px;
+      padding: 20px;
+      max-height: 500px;
+      overflow-y: auto;
     }
 
     .livro-card {
@@ -268,6 +274,22 @@
       padding: 60px;
       color: var(--text-muted);
     }
+
+    .loading-spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(99, 102, 241, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
   </style>
 </head>
 
@@ -301,7 +323,7 @@
             <button type="submit" class="btn btn-primary">Buscar</button>
           </div>
           {% if busca %}
-          <a href="/" class="btn btn-secondary">Limpar Filtro</a>
+          <a href="/" class="btn btn-secondary" style="margin-top: 8px;">Limpar Filtro</a>
           {% endif %}
         </form>
       </div>
@@ -315,7 +337,7 @@
       </div>
     </div>
 
-    <div class="livros-grid">
+    <div id="livros-grid" class="livros-grid">
       {% if livros %}
       {% for livro in livros %}
       <div class="livro-card">
@@ -325,13 +347,8 @@
             <span class="badge badge-genero">{{ livro.GENERO }}</span>
             <h2 class="livro-titulo">{{ livro.TITULO }}</h2>
           </div>
-
-          <div class="livro-autor">
-            Escrito por <strong>{{ livro.nome_autor }}</strong> em {{ livro.cidade_autor }}
-          </div>
-
+          <div class="livro-autor">Escrito por <strong>{{ livro.nome_autor }}</strong> em {{ livro.cidade_autor }}</div>
           <p class="livro-sinopse">{{ livro.sinopse }}</p>
-
           <div class="livro-footer">
             <div class="stat-item">
               <span>📦 Total Vendido:</span>
@@ -339,7 +356,6 @@
             </div>
           </div>
         </div>
-
         <div class="livro-actions">
           <form action="/livros/{{ livro.id }}/excluir" method="post"
             onsubmit="return confirm('Excluir este livro permanentemente?');">
@@ -354,8 +370,130 @@
       </div>
       {% endif %}
     </div>
+
+    <!-- Controles de Paginação -->
+    <div id="pagination-controls" class="pagination-controls"
+      style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 30px;">
+      <button id="btn-voltar" class="btn btn-secondary" style="font-size: 1.5rem; padding: 10px 20px;"
+        title="Página Anterior">&larr;</button>
+      <span id="pagina-info" style="font-weight: 600; color: var(--text-main);">
+        {% set total_val = total|default(0)|int %}
+        {% set total_pags = ((total_val + 9) // 10) %}
+        Página 1 de {{ total_pags if total_pags > 0 else 1 }}
+      </span>
+      <button id="btn-avancar" class="btn btn-secondary" style="font-size: 1.5rem; padding: 10px 20px;"
+        title="Próxima Página">&rarr;</button>
+    </div>
   </div>
 
+  <script>
+    // Configurações Globais
+    let paginaAtual = 0;
+    const limitePerPagina = 10;
+    const buscaAtual = '{{ busca if busca else "" }}';
+    let totalLivros = parseInt('{{ total if total else 0 }}') || 0;
+
+    // Elementos DOM
+    const btnVoltar = document.getElementById('btn-voltar');
+    const btnAvancar = document.getElementById('btn-avancar');
+    const paginaInfo = document.getElementById('pagina-info');
+    const livrosGrid = document.getElementById('livros-grid');
+    const paginationControls = document.getElementById('pagination-controls');
+
+    /**
+     * Atualiza a visibilidade e estado dos botões e do contador
+     */
+    function atualizarInterface() {
+      const totalPaginas = Math.ceil(totalLivros / limitePerPagina) || 1;
+
+      // Atualiza Texto
+      if (paginaInfo) {
+        paginaInfo.textContent = `Página ${paginaAtual + 1} de ${totalPaginas}`;
+      }
+
+      // Visibilidade do Container
+      if (paginationControls) {
+        paginationControls.style.display = (totalLivros > 0) ? 'flex' : 'none';
+      }
+
+      // Estados dos Botões
+      if (btnVoltar) btnVoltar.disabled = (paginaAtual === 0);
+      if (btnAvancar) {
+        btnAvancar.disabled = (paginaAtual + 1 >= totalPaginas);
+        btnAvancar.style.visibility = (paginaAtual + 1 >= totalPaginas) ? 'hidden' : 'visible';
+      }
+    }
+
+    /**
+     * Carrega os dados via API
+     */
+    async function carregarLivros(novaPagina) {
+      if (novaPagina < 0) return;
+
+      try {
+        if (btnVoltar) btnVoltar.disabled = true;
+        if (btnAvancar) btnAvancar.disabled = true;
+        livrosGrid.style.opacity = '0.5';
+
+        const url = `/api/livros?pagina=${novaPagina}&limite=${limitePerPagina}&busca=${encodeURIComponent(buscaAtual)}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Erro na API');
+
+        const data = await response.json();
+        const novosLivros = data.livros;
+        totalLivros = data.total;
+
+        if (novosLivros.length > 0 || novaPagina === 0) {
+          livrosGrid.innerHTML = '';
+          if (novosLivros.length === 0) {
+            livrosGrid.innerHTML = '<div class="card empty-state"><p>Nenhum dado encontrado.</p></div>';
+          } else {
+            novosLivros.forEach(livro => {
+              const html = `
+                <div class="livro-card">
+                  <div class="livro-main">
+                    <div class="livro-header">
+                      <span class="badge badge-id">ID #${livro.id}</span>
+                      <span class="badge badge-genero">${livro.GENERO}</span>
+                      <h2 class="livro-titulo">${livro.TITULO}</h2>
+                    </div>
+                    <div class="livro-autor">Escrito por <strong>${livro.nome_autor}</strong> em ${livro.cidade_autor}</div>
+                    <p class="livro-sinopse">${livro.sinopse}</p>
+                    <div class="livro-footer">
+                      <div class="stat-item">
+                        <span>📦 Total Vendido:</span>
+                        <span class="stat-value">${livro.total_vendas}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="livro-actions">
+                    <form action="/livros/${livro.id}/excluir" method="post" onsubmit="return confirm('Excluir este livro?');">
+                      <button type="submit" class="btn btn-danger">🗑️</button>
+                    </form>
+                  </div>
+                </div>`;
+              livrosGrid.insertAdjacentHTML('beforeend', html);
+            });
+            paginaAtual = novaPagina;
+          }
+          atualizarInterface();
+          livrosGrid.scrollTop = 0;
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao carregar dados.');
+      } finally {
+        livrosGrid.style.opacity = '1';
+      }
+    }
+
+    // Inicialização
+    if (btnAvancar) btnAvancar.addEventListener('click', () => carregarLivros(paginaAtual + 1));
+    if (btnVoltar) btnVoltar.addEventListener('click', () => carregarLivros(paginaAtual - 1));
+
+    // Roda a atualização inicial
+    atualizarInterface();
+  </script>
 </body>
 
 </html>

@@ -1,0 +1,6 @@
+CODG_AUTOR_PK,NOME,DATA_NASCIMENTO,CIDADE,CODG_LIVRO_PK,TITULO,GENERO,SINOPSE,CODG_AUTOR_FK,CODG_VENDA_PK,LOCAL,QUANTIDADE,CODG_LIVRO_FK,ANO_PUBLICACAO
+2001,Renata Alves Monteiro,1977-04-10,Feira de Santana,2001,A Memória do Cidade,Ensaios,Um estudo profundo sobre a natureza humana através da lente do esperança.,2001,2001,Saraiva,72,2001,2014
+2002,Camila Correia Soares,1981-03-21,São Paulo,2002,Campo Encontrado,Poesia,O confronto entre tradição e conservadorismo em uma sociedade dividida por poder.,2002,2002,FNAC,103,2002,2011
+2003,Laura Lopes Cunha,1953-06-25,Goiânia,2003,Sonho Esquecido,Comédia,"Memórias, segredos e revelações se entrelaçam nesta narrativa sobre destino.",2003,2003,Submarino,138,2003,1999
+2004,Marcos Carvalho Costa,1965-09-04,Santos,2004,Silêncio Encontrado,Não-Ficção,Uma jornada épica através de florestas esquecidas e montanhas proibidas em busca da verdade sobre o futuro.,2004,2004,Livraria Argumento,23,2004,2014
+2005,Rafael Dias Gomes,1991-10-28,Macapá,2005,Floresta: Uma História,Realismo Mágico,Um estudo profundo sobre a natureza humana através da lente do medo.,2005,2005,Magazine Luiza,126,2005,2010

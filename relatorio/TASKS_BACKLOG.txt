@@ -1,65 +1,68 @@
 ================================================================================
-📋 BACKLOG DE ATIVIDADES - SISTEMA DE MONITORAMENTO (SENIOR REVIEW)
+📋 BACKLOG DE ATIVIDADES - SISTEMA DE MONITORAMENTO (SENIOR REVIEW V2)
 ================================================================================
 
-Fala Júnior, analisei o estado atual da nossa aplicação e identifiquei dois 
-pontos críticos que precisamos atacar para garantir a escalabilidade do sistema. 
-Atualmente, estamos carregando tudo de uma vez, o que vai "matar" o navegador do 
-usuário quando o CSV tiver milhares de linhas.
+Fala Júnior, analisei seus pontos. Para melhorar de verdade a performance de um 
+ecossistema Banco + App, não basta só botar botão na tela. Precisamos garantir 
+que o MySQL trabalhe menos e que o Python seja mais eficiente no tráfego de dados.
 
-Abaixo, listei os desafios. Foco na modulação e performance. Qualquer dúvida 
-me chama no Slack.
+Abaixo estão as tarefas focadas em PERFORMANCE REAL.
 
 --------------------------------------------------------------------------------
-🚀 TAREFA 1: IMPLEMENTAÇÃO DE CARREGAMENTO SOB DEMANDA (PAGINAÇÃO/LIMIT)
+🚀 TAREFA 1: PAGINAÇÃO NO FRONT, BACK E SQL (USER EXPERIENCE)
 --------------------------------------------------------------------------------
-PROBLEMA: A rota principal renderiza todos os livros de uma vez. Isso gera um 
-DOM pesado e lentidão no carregamento inicial.
-
-OBJETIVO: Limitar a exibição inicial a 10 livros e adicionar um botão 
-"Carregar Mais" no final da lista.
+PROBLEMA: Carregar 5000 livros explode a memória do navegador e mata o banco.
+SOLUÇÃO: Paginação real (LIMIT/OFFSET).
 
 ONDE MEXER:
-1. Arquivo: `relatorio/app/database.py`
-   - Função: `carregar_livros_do_banco()`
-   - Ação: Adicionar parâmetros `limit` e `offset` à função e injetar na 
-     query SQL (Ex: LIMIT 10 OFFSET X).
-
-2. Arquivo: `relatorio/app/routes/web_routes.py`
-   - Função: `pagina_inicial()`
-   - Ação: Capturar um parâmetro `page` via query string (request.args) para 
-     controlar o deslocamento (offset) dos dados.
-
-3. Arquivo: `relatorio/templates/index.html`
-   - Ação: Criar o botão "Ver Mais" e uma função JavaScript (Fetch API) para 
-     buscar os próximos 10 registros e dar um "append" no grid atual sem 
-     recarregar a página inteira.
+1. `relatorio/app/database.py`: Altere `carregar_livros_do_banco(limit=10, offset=0)`.
+2. `relatorio/app/routes/web_routes.py`: Receba `page` da URL e calcule o offset.
+3. `relatorio/templates/index.html`: Botão "Carregar Mais" via JavaScript/Fetch 
+   para não dar refresh na página.
 
 --------------------------------------------------------------------------------
-💾 TAREFA 2: ABSTRAÇÃO DE INGESTÃO COM STORED PROCEDURES (SQL)
+⚡ TAREFA 2: INDEXAÇÃO E VIEW NO BANCO DE DATAS (DB PERFORMANCE)
 --------------------------------------------------------------------------------
-PROBLEMA: O código Python está "sujo" com muitos INSERTs manuais e lógica de 
-banco (ON DUPLICATE KEY). Isso deve ser responsabilidade do banco de dados.
+PROBLEMA: O comando GROUP BY e JOIN em tabelas grandes é lento porque o banco 
+faz "Full Table Scan".
 
-OBJETIVO: Criar uma Stored Procedure (PRC) no MySQL para gerenciar a inserção 
-dos dados e apenas chamá-la via Python.
+AÇÕES:
+1. Banco de Dados: Criar INDEX nas chaves estrangeiras (`CODG_AUTOR_FK`, 
+   `CODG_LIVRO_FK`) e na coluna de busca (`TITULO`).
+2. Banco de Dados: Criar uma VIEW chamada `vw_resumo_livros`. 
+   Mover toda a lógica complexa do SELECT (JOINs + SUM + GROUP BY) para essa View.
+3. `relatorio/app/database.py`: Simplificar a query para `SELECT * FROM vw_resumo_livros`.
 
-ONDE MEXER:
-1. Banco de Dados (MySQL):
-   - Ação: Criar uma procedure (ex: `sp_importar_registro_csv`) que receba 
-     todos os campos de uma linha e execute os 3 inserts (Autor, Livro, Vendas) 
-     dentro de uma transação.
+--------------------------------------------------------------------------------
+📦 TAREFA 3: BULK INSERT NA IMPORTAÇÃO (IMPORT PERFORMANCE)
+--------------------------------------------------------------------------------
+PROBLEMA: Rodar um `execute()` para cada linha do CSV é um pecado capital. 
+Cada comando é uma viagem de ida e volta ao banco (network roundtrip).
 
-2. Arquivo: `relatorio/app/database.py`
-   - Função: `importar_linha_csv()`
-   - Ação: Remover os blocos de `cursor.execute("INSERT...")` e substituir 
-     pela chamada da procedure: `cursor.callproc('sp_importar_registro_csv', [args...])`.
+AÇÃO:
+1. `relatorio/app/routes/web_routes.py`: Em vez de chamar a função para cada linha, 
+   acumule os dados em uma lista de 100 em 100.
+2. `relatorio/app/database.py`: Criar uma função que use `cursor.executemany()`. 
+   Isso permite que o MySQL processe 100 linhas em uma única chamada. 
+   A velocidade de importação vai aumentar em até 10x.
+
+--------------------------------------------------------------------------------
+🔗 TAREFA 4: CONNECTION POOLING (RESOURCES SAVING)
+--------------------------------------------------------------------------------
+PROBLEMA: Abrir e fechar conexão (`get_conn()`) em toda requisição gasta 
+muito processamento do servidor.
+
+AÇÃO:
+1. `relatorio/app/database.py`: Configurar o `mysql.connector.pooling`. 
+2. Criar um Pool de conexões global no início do arquivo e fazer o `get_conn()` 
+   apenas retirar uma conexão "quente" do pool.
 
 --------------------------------------------------------------------------------
 🎯 CRITÉRIOS DE ACEITE:
-- O Dashboard deve abrir em menos de 1 segundo.
-- O código Python não deve conter lógica complexa de SQL (CRUD simples).
-- Ao clicar em "Carregar Mais", os novos itens devem aparecer suavemente.
+- Importação de um CSV de 10k linhas em menos de 5 segundos.
+- Busca por título retornando resultado instantâneo.
+- Uso de memória do servidor estável.
 
-Bom trabalho, vamos pra cima! 🚀
+Vamos focar no que dá resultado! Qualquer dúvida na implementação do Pool 
+ou do Executemany, dá um grito. 🚀
 ================================================================================

@@ -1,68 +1,48 @@
 from flask import jsonify, request, Blueprint
 from ..database import (
     carregar_livros_do_banco, 
-    get_conn, 
-    excluir_livro_do_banco
+    excluir_livro_do_banco,
+    contar_total_livros
 )
-import mysql.connector
 
-# Criação do Blueprint da API.
+# Blueprint configurado com prefixo /api em app/__init__.py
 api_bp = Blueprint('api', __name__)
 
-
 # -----------------------------------------------------------------------------------------
-# ROTAS DA API REST (Retornam JSON)
+# ROTAS DA API REST (Retornam JSON para o AJAX/Frontend)
 # -----------------------------------------------------------------------------------------
 
 @api_bp.route('/livros', methods=['GET'])
 def obter_livros():
-    """Retorna todos os livros em formato JSON."""
-    livros = carregar_livros_do_banco()
-    return jsonify(livros)
-
-
-@api_bp.route('/livros/<int:id>', methods=['GET'])
-def obter_livro_por_id(id):
-    """Busca um único livro pelo ID."""
+    """
+    Retorna JSON com 'livros' (lista paginada) e 'total' (total de registros).
+    O JavaScript no Frontend utiliza essa rota para navegar entre as páginas.
+    """
     try:
-        conn = get_conn()
-        cur = conn.cursor(dictionary=True)
-        cur.execute("""
-            SELECT 
-                l.CODG_LIVRO_PK as id,
-                l.TITULO,
-                l.GENERO, 
-                l.SINOSPE as sinopse,
-                a.NOME as nome_autor,
-                a.CIDADE as cidade_autor,
-                COALESCE(SUM(v.QUANTIDADE), 0) as total_vendas
-            FROM livro l
-            LEFT JOIN autor a ON l.CODG_AUTOR_FK = a.CODG_AUTOR_PK
-            LEFT JOIN vendas v ON l.CODG_LIVRO_PK = v.CODG_LIVRO_FK
-            WHERE l.CODG_LIVRO_PK = %s
-            GROUP BY l.CODG_LIVRO_PK, l.TITULO, l.GENERO, l.SINOSPE, a.NOME, a.CIDADE
-        """, (id,))
-        livro = cur.fetchone()
-        cur.close()
-        conn.close()
+        pagina = request.args.get('pagina', default=0, type=int)
+        limite = request.args.get('limite', default=10, type=int)
+        busca = request.args.get('busca', default='').strip()
         
-        if livro:
-            return jsonify(livro)
-        return jsonify({"erro": "Livro não encontrado"}), 404
-    except mysql.connector.Error as err:
-        return jsonify({"erro": f"Erro ao buscar livro: {err}"}), 500
-
-
-
-
-
+        # Busca os dados no banco usando as funções centralizadas
+        livros = carregar_livros_do_banco(limite=limite, pagina=pagina, busca=busca)
+        total = contar_total_livros(busca)
+        
+        # Retorna a estrutura esperada pelo parser no index.html
+        return jsonify({
+            "livros": livros,
+            "total": total,
+            "pagina": pagina,
+            "limite": limite
+        })
+    except Exception as err:
+        return jsonify({"erro": f"Falha na API: {err}"}), 500
 
 @api_bp.route('/livros/<int:id>', methods=['DELETE'])
 def excluir_livro_api(id):
-    """Exclui um livro via API."""
+    """Exclui um livro via chamada de API."""
     try:
         if excluir_livro_do_banco(id):
-            return jsonify({"mensagem": "Livro excluído com sucesso"}), 200
-        return jsonify({"erro": "Livro não encontrado"}), 404
+            return jsonify({"mensagem": "Sucesso"}), 200
+        return jsonify({"erro": "Não encontrado"}), 404
     except Exception as err:
-        return jsonify({"erro": f"Erro ao excluir livro: {err}"}), 500
+        return jsonify({"erro": f"Erro: {err}"}), 500
