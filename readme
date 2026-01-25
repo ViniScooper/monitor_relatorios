@@ -1,5 +1,19 @@
-No backend, foi implementada uma paginação real diretamente no banco de dados usando LIMIT e OFFSET, permitindo que apenas pequenos conjuntos de registros sejam carregados por vez, mesmo com grandes volumes de dados. A lógica de importação de arquivos CSV foi centralizada em stored procedures, reduzindo o tráfego entre aplicação e banco e garantindo integridade dos dados. Também houve padronização dos nomes das colunas retornadas pelo banco para evitar erros no frontend.
+O sistema é uma aplicação web para acompanhar livros, autores e vendas de forma organizada e eficiente.
 
-Na importação de dados, o sistema passou a reconhecer automaticamente variações no nome da coluna de sinopse, evitando falhas comuns em arquivos CSV.
+Ele permite importar dados de relatórios em CSV, separar essas informações corretamente em autores, livros e vendas, e armazenar tudo em um banco de dados relacional MySQL sem gerar duplicações ou inconsistências.
 
-No frontend, a navegação foi modernizada com paginação por setas e exibição do total de páginas. A troca de páginas ocorre sem recarregar a tela, mantendo filtros ativos e exibindo feedback visual durante o carregamento.
+Depois da importação, o sistema oferece um dashboard visual onde é possível:
+
+Ver a lista de livros cadastrados
+
+Consultar informações do autor de cada livro
+
+Acompanhar vendas por cidade
+
+Visualizar o total de vendas de cada livro
+
+Buscar livros rapidamente pelo título
+
+Além da interface visual, o sistema também disponibiliza uma API REST, permitindo que outros sistemas consultem, adicionem ou removam livros de forma automática.
+
+Em resumo, o sistema serve para organizar, analisar e monitorar dados de livros e vendas, facilitando tanto o uso humano (via dashboard) quanto a integração com outras aplicações (via API).
